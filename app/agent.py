@@ -24,7 +24,7 @@ import os
 import google.auth
 
 # Import custom tools and schemas
-from app.tools import get_watchlist, fetch_and_parse_events, send_notification
+from app.tools import get_watchlist, fetch_and_parse_events, deduplicate_events, send_notification
 from app.schemas import Event
 
 # Setup environment
@@ -72,8 +72,13 @@ filtration_agent = Agent(
     - Systems monitoring, observability, metrics, and alerting (Prometheus, OpenTelemetry)
     - AI engineering (Generative AI, LLMs, model integration, agent development)
 
+    Geographical Requirement:
+    - STRICTLY ELIMINATE any events located in the USA (United States) or outside of Europe.
+    - ONLY include events located in Western Europe and Central Europe.
+    - Give a score of 0 to any event that violates this geographical requirement.
+
     For each event candidate:
-    - Determine a relevance score between 0 and 100.
+    - Determine a relevance score between 0 and 100 based on both the developer profile and the geographical requirement.
     - Provide a short and precise justification for your score.
     - Populate the output list matching the schema exactly.
     """,
@@ -95,12 +100,13 @@ root_agent = Agent(
     Follow this exact workflow to serve the user:
     1. Retrieve the watchlist of event sources using the `get_watchlist` tool.
     2. For each source found in the watchlist, fetch and parse raw events using the `fetch_and_parse_events` tool.
-    3. Aggregate all parsed candidate events.
-    4. Call the `filtration_agent` sub-agent to filter, score, and justify the relevance of the candidates.
-    5. ONLY AFTER filtering, use the `send_notification` tool to send the highly-scored curated events to the configured destination.
-    6. Present the final curated event list to the user and report the status of the notification.
+    3. Aggregate all parsed candidate events into a single list.
+    4. Call the `deduplicate_events` tool to remove any duplicate events from the aggregated list.
+    5. Call the `filtration_agent` sub-agent to filter, score, and justify the relevance of the deduplicated candidates.
+    6. ONLY AFTER filtering, use the `send_notification` tool to send the highly-scored curated events to the configured destination.
+    7. Present the final curated event list to the user and report the status of the notification.
     """,
-    tools=[get_watchlist, fetch_and_parse_events, send_notification],
+    tools=[get_watchlist, fetch_and_parse_events, deduplicate_events, send_notification],
     sub_agents=[filtration_agent],
 )
 

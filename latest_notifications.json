@@ -1,0 +1,100 @@
+{
+    "events": [
+        {
+            "title": "Prometheus Day 2026 (via Cloud Native Events)",
+            "date": "2026-09-24",
+            "location": "Munich, Germany",
+            "link": "https://example.com/event",
+            "relevance_score": 96,
+            "justification": "A highly specialized developer day completely dedicated to Prometheus, systems monitoring, alerting, metrics collection, and overall observability, which is a major component of the profile."
+        },
+        {
+            "title": "Google I/O Connect Europe (via Google Developers Europe)",
+            "date": "2026-06-25",
+            "location": "Berlin, Germany",
+            "link": "https://example.com/event",
+            "relevance_score": 97,
+            "justification": "European flagship developer conference showcasing Google Cloud solutions, Gemini APIs, and Go developer integrations, holding extreme relevance to the profile's multi-cloud and Go requirements."
+        },
+        {
+            "title": "AWS Summit Paris (via AWS Events Europe)",
+            "date": "2026-04-15",
+            "location": "Paris, France",
+            "link": "https://example.com/event",
+            "relevance_score": 91,
+            "justification": "Critical European cloud native summit focusing on AWS cloud architecture, container deployments (EKS), and infrastructure as code, directly serving the cloud infrastructure requirements."
+        },
+        {
+            "title": "Red Hat Summit Connect Madrid (via Red Hat Events)",
+            "date": "2026-08-30",
+            "location": "Madrid, Spain",
+            "link": "https://www.redhat.com/de/events",
+            "relevance_score": 90,
+            "justification": "Major Red Hat enterprise open source summit in Southern Europe focusing on hybrid cloud and AI infrastructure."
+        },
+        {
+            "title": "Codemotion Milan 2026 (via Italy Developer Events)",
+            "date": "2026-10-14",
+            "location": "Milan, Italy",
+            "link": "https://example.com/event",
+            "relevance_score": 92,
+            "justification": "Italy's biggest gathering for software developers. Features extensive tracks on backend architecture (Go/Python), AI engineering, and DevOps practices."
+        },
+        {
+            "title": "KubeCon Europe 2026 (via Dutch Tech Events)",
+            "date": "2026-04-18",
+            "location": "Amsterdam, Netherlands",
+            "link": "https://example.com/event",
+            "relevance_score": 99,
+            "justification": "The ultimate flagship event for cloud native computing and Kubernetes in the Netherlands, directly matching the highest priority skillsets."
+        },
+        {
+            "title": "WebExpo 2026 (via Czech Tech Events)",
+            "date": "2026-06-10",
+            "location": "Prague, Czech Republic",
+            "link": "https://example.com/event",
+            "relevance_score": 87,
+            "justification": "Central Europe's premier event for tech leaders and backend developers, fostering cross-disciplinary discussions around AI and systems design."
+        },
+        {
+            "title": "GOTO Copenhagen 2026 (via Nordic Tech Events)",
+            "date": "2026-09-02",
+            "location": "Copenhagen, Denmark",
+            "link": "https://example.com/event",
+            "relevance_score": 94,
+            "justification": "Top-tier enterprise software development conference in the Nordics with notoriously strong tracks on distributed systems, Go, and observability."
+        },
+        {
+            "title": "Swiss Python Summit 2026 (via Swiss Tech Events)",
+            "date": "2026-02-20",
+            "location": "Rapperswil, Switzerland",
+            "link": "https://example.com/event",
+            "relevance_score": 91,
+            "justification": "A community-focused conference in Switzerland perfectly targeting the Python developer profile, highlighting ML engineering and advanced data pipelines."
+        },
+        {
+            "title": "InfoShare 2026 (via Poland Tech Events)",
+            "date": "2026-05-13",
+            "location": "Gda\u0144sk, Poland",
+            "link": "https://example.com/event",
+            "relevance_score": 89,
+            "justification": "The biggest tech and startup conference in CEE (Poland), heavily showcasing advanced backend scalable systems and AI engineering."
+        },
+        {
+            "title": "Shift Conference 2026 (via Croatia Tech Events)",
+            "date": "2026-09-19",
+            "location": "Zadar, Croatia",
+            "link": "https://example.com/event",
+            "relevance_score": 90,
+            "justification": "A premier developer conference in Croatia gathering attendees globally for high-level technical discussions on cloud infrastructure and API development."
+        },
+        {
+            "title": "Web Summit 2026 (via Portugal Tech Events)",
+            "date": "2026-11-10",
+            "location": "Lisbon, Portugal",
+            "link": "https://example.com/event",
+            "relevance_score": 93,
+            "justification": "One of the largest global tech conferences hosted in Portugal, offering high-value networking and deep dives into cloud infrastructure and AI startups."
+        }
+    ]
+}
