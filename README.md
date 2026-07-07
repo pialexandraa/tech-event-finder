@@ -1,14 +1,21 @@
-# TechEvent Finder
+# TechEvent Finder (TEFinder)
 
-An autonomous agent that monitors European tech conferences and developer events, scores them against a target profile, and delivers a curated shortlist directly to your inbox — automatically.
+This is an autonomous agent that monitors tech events for the european area, scores them against a target profile (based on the user interests), and delivers a curated shortlist directly to your e-mail inbox — automatically.
 
 ---
 
 ## What it does
 
-Keeping track of tech events across Europe is noisy and time-consuming. This project automates that. It watches a curated list of event sources — conference sites, community calendars, and platform feeds — fetches what's coming up, removes duplicates, and then uses an AI model to evaluate which events actually matter based on a specific developer profile. The result lands in your email.
+**This tool/agent watches a curated list of event sources — conference sites, community calendars, and platform feeds — fetches what's coming up, removes duplicates, and then uses an AI model to evaluate which events actually matter based on a specific developer/technician profile. The result lands in your email.**
 
-No manual browsing. No copy-pasting. Just a clean, scored list when you need it.
+The tool/agent actually includes 2 agents:
+- a filtration agent which is the "mini-brain" and does the "actual thinking," meaning the heavy lifting: reading through each event, scoring the events based on interest, writing the score justification, eliminating items outside the defined area of interest (Europe), and returning the objects as a structured object.
+- a root agent which is coordinating the activity and routing specific data movement paths. For example:
+  a. call `get_watchlist` to get the list of sources
+  b. call `fetch_and_parse_events` for each source in a loop
+  c. call `deduplicate_events` on the collected data
+  d. hand off to the filtration agent
+  e. pick up the result from session state and call `send_notification`
 
 ---
 
@@ -41,54 +48,6 @@ Once scoring is done, the top events are formatted into a clean HTML table and s
 
 ![Tool Schema](screens/tool_schema.jpg)
 
-```mermaid
-flowchart TD
-    classDef node fill:#ffffff,stroke:#1b5e20,stroke-width:2px,color:#1b5e20,font-weight:bold
-    classDef state fill:#f1f8f1,stroke:#1b5e20,stroke-width:1.5px,color:#1b5e20,font-style:italic
-    linkStyle default stroke:#2e7d32,stroke-width:1.5px
-
-    Trigger(Trigger: Cron Job / CLI Demo) ::: node
-    Root(Root Agent — Orchestrator) ::: node
-    Watchlist(Tool: get_watchlist) ::: node
-    Loop(Tool: fetch_and_parse_events — called once per source in a loop) ::: node
-    Sources(European Event Sources — Devoxx · GDG · Red Hat · Linux Foundation) ::: node
-    Dedup(Tool: deduplicate_events — Title & Date Merging) ::: node
-    Filter(Filtration Agent — LLM Scoring & Profiling) ::: node
-    State(Session State — curation_result key) ::: state
-    Notify(Tool: send_notification — Secure HTML · SMTP · Webhook) ::: node
-    Deliver(User Inbox / Slack / Discord) ::: node
-
-    Trigger --> Root
-    Root --> Watchlist
-    Watchlist --> Root
-    Root -->|for each source| Loop
-    Loop <-->|HTTP fetch| Sources
-    Loop -->|raw events per source| Root
-    Root --> Dedup
-    Dedup --> Root
-    Root -->|transfers control| Filter
-    Filter -->|writes curated results| State
-    State -->|root agent reads| Root
-    Root --> Notify
-    Notify --> Deliver
-```
-
----
-
-## Key technical decisions
-
-**Why two agents?**
-The orchestrator (root agent) handles coordination — fetching, deduplicating, and dispatching. The filtration agent handles judgment — scoring and justifying. Keeping these separate means each does one thing well and the scoring logic can be tuned independently.
-
-**Why is deduplication done before the AI step?**
-AI calls cost tokens and time. Running deduplication first means the model only evaluates each unique event once, not the same event three times because three different sites listed it.
-
-**How are links kept safe in the email?**
-Before any event link is inserted into the HTML email, the code validates that the URL starts with `http://` or `https://`. It then escapes all special characters to prevent any injected content from being interpreted as HTML or JavaScript inside the email client.
-
-**Where are credentials stored?**
-Nowhere in the code. All sensitive values — email address, app password, webhook URL, and API key — are read exclusively from environment variables at runtime. The `.env.example` file in the repository shows which variables are needed, without containing any real values.
-
 ---
 
 ## Security
@@ -98,13 +57,13 @@ The email delivery pipeline handles data from external websites — sources that
 ### 1. URL scheme validation
 Every event link scraped from an external source is checked before it is placed into the email. The code explicitly verifies that the URL begins with `http://` or `https://`. If it starts with anything else — such as `javascript:`, `data:`, or `vbscript:` — the link is silently dropped and the event title is rendered as plain text instead. This blocks a common class of attack where a malicious actor injects a fake URL that executes code inside the reader's email client when clicked.
 
-### 2. HTML character escaping
+### 2. HTML character escaping and avoiding XSS attacks
 Even after a URL passes the scheme check, every single piece of text that goes into the email — the event title, date, location, relevance justification, and the URL itself — is passed through Python's built-in `html.escape()` function with full quote escaping enabled. This converts characters like `<`, `>`, `"`, and `&` into their safe HTML equivalents (`&lt;`, `&gt;`, `&quot;`, `&amp;`). The result is that even if a scraped event title contained something like `<script>alert('xss')</script>`, it would appear in the email as harmless visible text, not as executable code.
 
 ### 3. No credentials in code
-The email credentials (sender address, app password, and receiver address) are never written into the source code or committed to the repository. They are loaded exclusively from environment variables at runtime. This means that even if the repository were made public, no sensitive credentials would be exposed.
+The email credentials (sender address, app password, and receiver address) are never written into the source code or committed to the repository. They are loaded exclusively from environment variables at runtime. This means that even if the repository were made public, no sensitive credentials would be exposed. I specifically used Google tools and password replacers for ease of access and hassle-free testing.
 
-Together, these three measures ensure that the pipeline cannot be used as a vector to deliver malicious content to the inbox, regardless of what the upstream event sources contain.
+💪 **Together, these three measures ensure that the pipeline cannot be used as a vector to deliver malicious content to the inbox, regardless of what the upstream event sources contain.**
 
 ---
 
