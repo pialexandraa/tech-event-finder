@@ -1,6 +1,8 @@
 # TechEvent Finder (TEFinder)
 
-This is an autonomous agent that monitors tech events for the european area, scores them against a target profile (based on the user interests), and delivers a curated shortlist directly to your e-mail inbox — automatically.
+* This application is the final submission project for the Google - Kaggle course called "[5-Day AI Agents: AI Agents and intensive vibe-coding](https://www.kaggle.com/competitions/5-day-ai-agents-intensive-vibecoding-course-with-google)"
+
+* This is an autonomous agent that monitors tech events for the european area, scores them against a target profile (based on the user interests), and delivers a curated shortlist directly to your e-mail inbox — automatically.
 
 ---
 
